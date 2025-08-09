@@ -1,3 +1,4 @@
+
 "use client"
 
 import {
@@ -19,6 +20,7 @@ import {
   Heart,
   User,
   PlusSquare,
+  Wand,
 } from "lucide-react"
 import { UserNav } from "@/components/user-nav"
 import { usePathname } from "next/navigation"
@@ -29,6 +31,7 @@ const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Painel" },
   { href: "/wardrobe", icon: Shirt, label: "Guarda-Roupa" },
   { href: "/builder", icon: Sparkles, label: "Criador IA" },
+  { href: "/manual-builder", icon: Wand, label: "Criador Manual" },
   { href: "/feed", icon: Heart, label: "Inspiração" },
   { href: "/profile", icon: User, label: "Perfil" },
 ]
