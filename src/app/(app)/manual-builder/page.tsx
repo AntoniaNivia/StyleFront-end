@@ -33,7 +33,7 @@ type LookSelecionado = {
 };
 
 const categorias: { id: Categoria; nome: string; tipos: string[] }[] = [
-  { id: 'top', nome: 'Parte de Cima', tipos: ['Blusa', 'Camisa', 'Top'] },
+  { id: 'top', nome: 'Parte de Cima', tipos: ['Blusa', 'Camisa', 'Top', 'Camiseta'] },
   { id: 'bottom', nome: 'Parte de Baixo', tipos: ['Calça', 'Saia', 'Shorts'] },
   { id: 'outerwear', nome: 'Casaco/Jaqueta', tipos: ['Jaqueta', 'Casaco', 'Blazer'] },
   { id: 'shoes', nome: 'Sapatos', tipos: ['Sapatos', 'Tênis', 'Botas'] },
@@ -211,4 +211,3 @@ export default function ManualBuilderPage() {
     </div>
   );
 }
-
