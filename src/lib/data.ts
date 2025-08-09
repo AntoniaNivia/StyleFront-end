@@ -1,6 +1,22 @@
+
 import type { Usuario, ItemDeVestuario, PostagemFeed } from './types';
 
+// Para testar a funcionalidade de loja, troque o mockUser para ser o mockStoreUser
 export const mockUser: Usuario = {
+    id: 'store-1',
+    name: 'Boutique Chique',
+    email: 'contato@boutiquechique.com',
+    avatarUrl: 'https://placehold.co/100x100.png',
+    type: 'store',
+    genero: 'outro',
+    preferenciaManequim: 'neutro',
+    bio: 'A melhor moda da cidade. Looks únicos e de alta qualidade.',
+    estilosPreferidos: ['moderno', 'formal', 'casual'],
+    coresFavoritas: ['preto', 'branco', 'dourado'],
+    pecasChave: ['Blazer', 'Vestido de festa'],
+};
+
+export const mockRegularUser: Usuario = {
   id: 'user-1',
   name: 'Sofia',
   email: 'sofia@exemplo.com',
@@ -14,13 +30,6 @@ export const mockUser: Usuario = {
   pecasChave: ['Jaqueta de couro', 'Vestido floral', 'Bota de cano curto'],
 };
 
-export const mockStoreUser: Usuario = {
-    id: 'store-1',
-    name: 'Boutique Chique',
-    email: 'contato@boutiquechique.com',
-    avatarUrl: 'https://placehold.co/100x100.png',
-    type: 'store',
-}
 
 export const guardaRoupa: ItemDeVestuario[] = [
   { id: 'item-1', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Jaqueta Jeans Azul', tipo: 'Jaqueta', cor: 'Azul', estacao: 'Primavera', ocasiao: 'Casual', tags: ['jeans', 'casaco'] },
