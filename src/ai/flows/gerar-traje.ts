@@ -20,6 +20,11 @@ const GerarTrajeInputSchema = z.object({
 });
 export type GerarTrajeInput = z.infer<typeof GerarTrajeInputSchema>;
 
+const TrajeSugeridoSchema = z.object({
+    sugestaoTraje: z.string().describe('Uma descrição do traje sugerido.'),
+    justificativa: z.string().describe('As notas do estilista explicando a escolha do traje.'),
+});
+
 const GerarTrajeOutputSchema = z.object({
   sugestaoTraje: z.string().describe('Uma descrição do traje sugerido.'),
   justificativa: z.string().describe('As notas do estilista explicando a escolha do traje.'),
@@ -39,7 +44,7 @@ export async function gerarTraje(input: GerarTrajeInput): Promise<GerarTrajeOutp
 const promptSugestaoTraje = ai.definePrompt({
   name: 'promptSugestaoTraje',
   input: {schema: GerarTrajeInputSchema},
-  output: {schema: GerarTrajeOutputSchema},
+  output: {schema: TrajeSugeridoSchema},
   prompt: `Você é um estilista pessoal ajudando os usuários a escolher um traje do guarda-roupa deles.
 
   Dadas as seguintes informações, sugira um traje e explique seu raciocínio.
@@ -49,12 +54,8 @@ const promptSugestaoTraje = ai.definePrompt({
   Clima: {{{clima}}}
   Ocasião: {{{ocasiao}}}
 
-  Justificativa: Explique brevemente por que você escolheu este traje e como ele atende às necessidades do usuário.
-  Sugestão de Traje: Uma descrição do traje sugerido.
-
-  {{#json}}
-  { "sugestaoTraje": "...", "justificativa": "..." }
-  {{/json}}`,
+  Responda estritamente com um objeto JSON que corresponda ao esquema de saída. Não inclua nenhuma outra formatação ou texto explicativo.
+  `,
 });
 
 const fluxoGerarTraje = ai.defineFlow(
@@ -66,17 +67,23 @@ const fluxoGerarTraje = ai.defineFlow(
   async input => {
     const {output: resultadoSugestaoTraje} = await promptSugestaoTraje(input);
 
+    if (!resultadoSugestaoTraje) {
+        throw new Error("Não foi possível obter a sugestão de traje da IA.");
+    }
+
+    const promptImagem = `Um manequim ${input.preferenciaManequim} vestindo o seguinte traje: ${resultadoSugestaoTraje.sugestaoTraje}. O manequim deve estar em um fundo de estúdio branco liso. A foto deve ser de corpo inteiro.`;
+
     const {media} = await ai.generate({
       model: 'googleai/gemini-2.0-flash-preview-image-generation',
-      prompt: resultadoSugestaoTraje!.sugestaoTraje,
+      prompt: promptImagem,
       config: {
         responseModalities: ['TEXT', 'IMAGE'],
       },
     });
 
     return {
-      sugestaoTraje: resultadoSugestaoTraje!.sugestaoTraje,
-      justificativa: resultadoSugestaoTraje!.justificativa,
+      sugestaoTraje: resultadoSugestaoTraje.sugestaoTraje,
+      justificativa: resultadoSugestaoTraje.justificativa,
       mannequinPhotoDataUri: media?.url ?? '',
     };
   }
