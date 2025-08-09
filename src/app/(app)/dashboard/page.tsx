@@ -1,14 +1,48 @@
+
+"use client"
+
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { mockUser, guardaRoupa } from "@/lib/data"
-import { Shirt, Sparkles, Star } from "lucide-react"
+import { mockUser, guardaRoupa as initialGuardaRoupa, feedPosts as initialFeedPosts } from "@/lib/data"
+import { Shirt, Sparkles, Star, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useToast } from "@/hooks/use-toast"
+import { gerarLookDoDia } from "@/actions/builder"
+import type { GerarTrajeOutput } from "@/ai/flows/gerar-traje"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function DashboardPage() {
   const usuario = mockUser;
+  const [guardaRoupa, setGuardaRoupa] = useState(initialGuardaRoupa)
+  const [feedPosts, setFeedPosts] = useState(initialFeedPosts)
+
+  const [lookDoDia, setLookDoDia] = useState<GerarTrajeOutput | null>(null)
+  const [carregandoLook, setCarregandoLook] = useState(true)
+  const { toast } = useToast()
+
+  useEffect(() => {
+    const fetchLookDoDia = async () => {
+      setCarregandoLook(true)
+      try {
+        const look = await gerarLookDoDia()
+        setLookDoDia(look)
+      } catch (error) {
+        toast({
+          title: "Erro ao Gerar Look",
+          description: "Não foi possível buscar a sugestão de look do dia.",
+          variant: "destructive",
+        })
+      } finally {
+        setCarregandoLook(false)
+      }
+    }
+    fetchLookDoDia()
+  }, [toast])
+
   const contagemGuardaRoupa = guardaRoupa.length;
-  const contagemLooksSalvos = 5; // Dados mocados
+  const contagemLooksSalvos = feedPosts.filter(p => p.salvo).length;
 
   return (
     <div className="space-y-6">
@@ -44,16 +78,29 @@ export default function DashboardPage() {
             <CardDescription>Uma sugestão de traje especial, só para você!</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center gap-4 md:flex-row">
-            <div className="relative h-[400px] w-full max-w-[250px] flex-shrink-0">
-               <Image src="https://placehold.co/400x600.png" alt="Look do dia" fill className="rounded-lg object-cover" data-ai-hint="fashion mannequin" />
-            </div>
-            <div className="space-y-4">
-                <p className="font-semibold">Vibe de Hoje: Explorador Urbano</p>
-                <p className="text-muted-foreground">Para um dia frio na cidade, estamos combinando sua clássica Jaqueta Jeans Azul com os versáteis Jeans Skinny Pretos e uma camiseta branca simples. Esta combinação atemporal é confortável e estilosa sem esforço. Complete o look com seus tênis ou botas favoritos.</p>
-                 <Button className="bg-accent hover:bg-accent/90" asChild>
-                    <Link href="/builder">Experimente no Criador</Link>
-                </Button>
-            </div>
+            {carregandoLook ? (
+              <div className="flex w-full flex-col items-center gap-4 md:flex-row">
+                 <Skeleton className="relative h-[400px] w-full max-w-[250px] flex-shrink-0 rounded-lg" />
+                 <div className="w-full space-y-4">
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-20 w-full" />
+                    <Skeleton className="h-10 w-36" />
+                 </div>
+              </div>
+            ) : lookDoDia && (
+              <>
+                <div className="relative h-[400px] w-full max-w-[250px] flex-shrink-0">
+                   <Image src={lookDoDia.mannequinPhotoDataUri} alt="Look do dia" fill className="rounded-lg object-cover" data-ai-hint="fashion mannequin" />
+                </div>
+                <div className="space-y-4">
+                    <p className="font-semibold">{lookDoDia.sugestaoTraje}</p>
+                    <p className="text-muted-foreground">{lookDoDia.justificativa}</p>
+                     <Button className="bg-accent hover:bg-accent/90" asChild>
+                        <Link href="/builder">Experimente no Criador</Link>
+                    </Button>
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
         <div className="space-y-6">

@@ -21,3 +21,20 @@ export async function gerarLook(input: GerarLookInput): Promise<GerarTrajeOutput
         throw new Error("Falha ao gerar traje com IA.");
     }
 }
+
+export async function gerarLookDoDia(): Promise<GerarTrajeOutput> {
+    try {
+        const fullInput: GerarTrajeInput = {
+            guardaRoupa: JSON.stringify(guardaRoupa),
+            estiloUsuario: "casual, confortável, moderno",
+            clima: "ameno",
+            ocasiao: "um dia típico",
+            preferenciaManequim: mockUser.preferenciaManequim || 'neutro',
+        };
+        const result = await gerarTraje(fullInput);
+        return result;
+    } catch (error) {
+        console.error("Erro ao gerar look do dia:", error);
+        throw new Error("Falha ao gerar look do dia com IA.");
+    }
+}
