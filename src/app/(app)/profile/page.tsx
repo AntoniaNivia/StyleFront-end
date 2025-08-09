@@ -36,10 +36,12 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
-import { X, Bookmark, Trash2 } from 'lucide-react';
+import { X, Bookmark, Trash2, Heart, HeartOff } from 'lucide-react';
 import Image from 'next/image';
 
 const availableStyles = ['Casual', 'Formal', 'Esportivo', 'Vintage', 'Moderno', 'Boêmio', 'Minimalista'];
+
+type DialogMode = 'saved' | 'liked';
 
 export default function ProfilePage() {
   const [user, setUser] = useState(mockUser);
@@ -50,10 +52,12 @@ export default function ProfilePage() {
   const [corInput, setCorInput] = useState('');
   const [pecaInput, setPecaInput] = useState('');
   const [selectedLook, setSelectedLook] = useState<PostagemFeed | null>(null);
+  const [dialogMode, setDialogMode] = useState<DialogMode>('saved');
 
   const { toast } = useToast();
 
-  const savedLooks = feedPosts.filter(post => post.salvo && post.autor.id === user.id);
+  const savedLooks = feedPosts.filter(post => post.salvo);
+  const likedLooks = feedPosts.filter(post => post.curtido);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -119,6 +123,22 @@ export default function ProfilePage() {
     });
   }
 
+  const handleUnlike = (postId: string) => {
+    setFeedPosts(posts => posts.map(post =>
+      post.id === postId ? { ...post, curtido: false, curtidas: post.curtidas - 1 } : post
+    ));
+    setSelectedLook(null);
+    toast({
+        title: "Look Descurtido",
+        description: "O look foi removido da sua lista de curtidas."
+    });
+  }
+
+  const openDialog = (post: PostagemFeed, mode: DialogMode) => {
+    setDialogMode(mode);
+    setSelectedLook(post);
+  }
+
   return (
     <>
     <form onSubmit={handleSaveChanges} className="space-y-6">
@@ -135,9 +155,10 @@ export default function ProfilePage() {
       </div>
 
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="profile">Perfil e Preferências</TabsTrigger>
             <TabsTrigger value="saved">Looks Salvos</TabsTrigger>
+            <TabsTrigger value="liked">Looks Curtidos</TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
             <Card>
@@ -281,7 +302,7 @@ export default function ProfilePage() {
                     {savedLooks.length > 0 ? (
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                             {savedLooks.map(post => (
-                                <button key={post.id} className="group relative rounded-lg overflow-hidden" onClick={() => setSelectedLook(post)}>
+                                <button key={post.id} className="group relative rounded-lg overflow-hidden" onClick={() => openDialog(post, 'saved')}>
                                     <Image 
                                         src={post.imageUrl}
                                         alt={post.legenda}
@@ -306,6 +327,44 @@ export default function ProfilePage() {
                 </CardContent>
             </Card>
         </TabsContent>
+         <TabsContent value="liked">
+             <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Heart />
+                        Meus Looks Curtidos
+                    </CardTitle>
+                    <CardDescription>Aqui estão todos os looks que você curtiu.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {likedLooks.length > 0 ? (
+                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                            {likedLooks.map(post => (
+                                <button key={post.id} className="group relative rounded-lg overflow-hidden" onClick={() => openDialog(post, 'liked')}>
+                                    <Image 
+                                        src={post.imageUrl}
+                                        alt={post.legenda}
+                                        width={400}
+                                        height={600}
+                                        className="object-cover aspect-[3/4] w-full h-full transition-transform duration-300 group-hover:scale-105"
+                                    />
+                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-white opacity-0 transition-opacity group-hover:opacity-100 rounded-b-lg">
+                                        <p className="text-sm line-clamp-2">{post.legenda}</p>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    ) : (
+                         <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg">
+                            <Heart className="h-10 w-10 mb-2" />
+                            <p className="font-semibold">Nenhum look curtido ainda</p>
+                            <p className="text-sm">Curta looks no feed para vê-los aqui!</p>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+        </TabsContent>
       </Tabs>
     </form>
 
@@ -323,10 +382,17 @@ export default function ProfilePage() {
                          <Image src={selectedLook.imageUrl} alt={selectedLook.legenda} fill className="object-cover"/>
                     </div>
                     <DialogFooter className="sm:justify-between gap-2">
-                        <Button variant="destructive" onClick={() => handleRemoveFromSaved(selectedLook.id)}>
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Remover dos Salvos
-                        </Button>
+                        {dialogMode === 'saved' ? (
+                             <Button variant="destructive" onClick={() => handleRemoveFromSaved(selectedLook.id)}>
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Remover dos Salvos
+                            </Button>
+                        ) : (
+                            <Button variant="destructive" onClick={() => handleUnlike(selectedLook.id)}>
+                                <HeartOff className="mr-2 h-4 w-4" />
+                                Descurtir
+                            </Button>
+                        )}
                         <DialogClose asChild>
                             <Button type="button" variant="secondary">
                                 Fechar
@@ -340,5 +406,3 @@ export default function ProfilePage() {
     </>
   );
 }
-
-    
