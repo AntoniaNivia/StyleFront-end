@@ -12,13 +12,13 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const VisualizarTrajeInputSchema = z.object({
+const VisualizarTrajeInputSchema = z.object({
   descricaoTraje: z.string().describe('Uma descrição textual do traje a ser visualizado.'),
   preferenciaManequim: z.string().describe('A preferência do usuário para o manequim (ex: feminino, masculino, neutro).'),
 });
 export type VisualizarTrajeInput = z.infer<typeof VisualizarTrajeInputSchema>;
 
-export const VisualizarTrajeOutputSchema = z.object({
+const VisualizarTrajeOutputSchema = z.object({
   mannequinPhotoDataUri: z
     .string()
     .describe(
