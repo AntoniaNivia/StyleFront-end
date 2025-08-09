@@ -7,11 +7,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Loader2, Sparkles, Wand2 } from "lucide-react"
+import { Loader2, Sparkles, Wand2, Star } from "lucide-react"
 import Image from "next/image"
 import { useToast } from "@/hooks/use-toast"
 import { gerarLook } from "@/actions/builder"
 import type { GerarTrajeOutput } from "@/ai/flows/gerar-traje"
+import { feedPosts, mockUser } from "@/lib/data"
+import { PostagemFeed } from "@/lib/types"
 
 export default function BuilderPage() {
   const [clima, setClima] = useState("")
@@ -19,12 +21,14 @@ export default function BuilderPage() {
   const [estiloUsuario, setEstiloUsuario] = useState("")
   const [carregando, setCarregando] = useState(false)
   const [resultado, setResultado] = useState<GerarTrajeOutput | null>(null)
+  const [salvo, setSalvo] = useState(false)
   const { toast } = useToast()
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault()
     setCarregando(true)
     setResultado(null)
+    setSalvo(false)
     try {
       const response = await gerarLook({ clima, ocasiao, estiloUsuario: estiloUsuario })
       setResultado(response)
@@ -38,6 +42,35 @@ export default function BuilderPage() {
       setCarregando(false)
     }
   }
+
+  const handleSaveLook = () => {
+    if (!resultado) return;
+  
+    // Em um app real, você salvaria isso no backend.
+    // Aqui, vamos simular adicionando a um estado local ou a uma lista mock.
+    // Por simplicidade, vamos apenas exibir um toast.
+    setSalvo(true);
+    toast({
+      title: "Look Salvo!",
+      description: "O traje foi adicionado à sua coleção no perfil.",
+    });
+
+    // O ideal seria ter uma lista de looks salvos no mockUser
+    // e adicionar este look a ela. Vamos simular isso:
+    const newPost: PostagemFeed = {
+        id: `post-generated-${Date.now()}`,
+        autor: { id: mockUser.id, name: mockUser.name, avatarUrl: mockUser.avatarUrl || '' },
+        imageUrl: resultado.mannequinPhotoDataUri,
+        legenda: `Look gerado por IA para ${ocasiao}`,
+        curtidas: 0,
+        curtido: false,
+        salvo: true,
+        itens: [], 
+    };
+    // Esta é uma simulação, não persistirá. Para persistir,
+    // precisaríamos de gerenciamento de estado global ou chamadas de API.
+    console.log("Novo look salvo (simulação):", newPost);
+  };
 
   return (
     <div className="grid h-full min-h-[calc(100vh-8rem)] gap-6 lg:grid-cols-5">
@@ -99,11 +132,19 @@ export default function BuilderPage() {
                  <div className="relative h-[450px] w-full max-w-[300px] flex-shrink-0">
                     <Image src={resultado.mannequinPhotoDataUri} alt="Traje gerado" fill className="rounded-lg object-cover" />
                  </div>
-                 <div className="w-full space-y-4">
-                    <h3 className="text-xl font-bold">Notas do Estilista</h3>
-                    <p className="text-muted-foreground">{resultado.justificativa}</p>
-                    <h3 className="text-xl font-bold">Sugestão de Traje</h3>
-                    <p className="text-muted-foreground">{resultado.sugestaoTraje}</p>
+                 <div className="flex w-full flex-col space-y-4">
+                    <div>
+                        <h3 className="text-xl font-bold">Sugestão de Traje</h3>
+                        <p className="text-muted-foreground">{resultado.sugestaoTraje}</p>
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-bold">Notas do Estilista</h3>
+                        <p className="text-muted-foreground">{resultado.justificativa}</p>
+                    </div>
+                    <Button onClick={handleSaveLook} disabled={salvo} variant="outline">
+                        <Star className={`mr-2 h-4 w-4 ${salvo ? "text-yellow-400 fill-current" : ""}`} />
+                        {salvo ? "Salvo!" : "Salvar Look"}
+                    </Button>
                  </div>
             </CardContent>
           )}

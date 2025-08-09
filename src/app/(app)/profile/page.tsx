@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -13,7 +14,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { mockUser } from '@/lib/data';
+import { mockUser, feedPosts } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import {
   Select,
@@ -25,7 +26,8 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
-import { X } from 'lucide-react';
+import { X, Bookmark } from 'lucide-react';
+import Image from 'next/image';
 
 const availableStyles = ['Casual', 'Formal', 'Esportivo', 'Vintage', 'Moderno', 'Boêmio', 'Minimalista'];
 
@@ -37,8 +39,9 @@ export default function ProfilePage() {
   const [corInput, setCorInput] = useState('');
   const [pecaInput, setPecaInput] = useState('');
 
-
   const { toast } = useToast();
+
+  const savedLooks = feedPosts.filter(post => post.salvo && post.autor.id === user.id);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -107,133 +110,178 @@ export default function ProfilePage() {
         </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-6">
-            <Avatar className="h-24 w-24 cursor-pointer border-4 border-primary">
-              <AvatarImage src={user.avatarUrl} alt={user.name} />
-              <AvatarFallback className="text-3xl">
-                {user.name.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            <div className='w-full'>
-              <CardTitle className="text-3xl">{user.name}</CardTitle>
-              <CardDescription className="mt-1">
-                <Badge variant="secondary" className="capitalize">
-                  {user.type} Usuário
-                </Badge>
-              </CardDescription>
-               <Textarea
-                id="bio"
-                placeholder="Conte um pouco sobre você e seu estilo..."
-                value={user.bio || ''}
-                onChange={handleInputChange}
-                className="mt-2"
-              />
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="personal">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="personal">Informações Pessoais</TabsTrigger>
-              <TabsTrigger value="style">Preferências de Estilo</TabsTrigger>
-            </TabsList>
-            <TabsContent value="personal" className="mt-6">
-              <div className="space-y-6">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="grid gap-2">
-                    <Label htmlFor="name">Nome</Label>
-                    <Input id="name" value={user.name} onChange={handleInputChange} />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" value={user.email} onChange={handleInputChange}/>
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="gender">Gênero</Label>
-                    <Select value={user.genero} onValueChange={handleSelectChange('genero')}>
-                      <SelectTrigger id="gender">
-                        <SelectValue placeholder="Selecione o gênero" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="feminino">Feminino</SelectItem>
-                        <SelectItem value="masculino">Masculino</SelectItem>
-                        <SelectItem value="outro">Outro</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="mannequin">Preferência de Manequim</Label>
-                    <Select value={user.preferenciaManequim} onValueChange={handleSelectChange('preferenciaManequim')}>
-                      <SelectTrigger id="mannequin">
-                        <SelectValue placeholder="Selecione a preferência" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="feminino">Feminino</SelectItem>
-                        <SelectItem value="masculino">Masculino</SelectItem>
-                        <SelectItem value="neutro">Neutro</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+      <Tabs defaultValue="profile" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="profile">Perfil e Preferências</TabsTrigger>
+            <TabsTrigger value="saved">Looks Salvos</TabsTrigger>
+        </TabsList>
+        <TabsContent value="profile">
+            <Card>
+                <CardHeader>
+                <div className="flex items-center gap-6">
+                    <Avatar className="h-24 w-24 cursor-pointer border-4 border-primary">
+                    <AvatarImage src={user.avatarUrl} alt={user.name} />
+                    <AvatarFallback className="text-3xl">
+                        {user.name.charAt(0)}
+                    </AvatarFallback>
+                    </Avatar>
+                    <div className='w-full'>
+                    <CardTitle className="text-3xl">{user.name}</CardTitle>
+                    <CardDescription className="mt-1">
+                        <Badge variant="secondary" className="capitalize">
+                        {user.type} Usuário
+                        </Badge>
+                    </CardDescription>
+                    <Textarea
+                        id="bio"
+                        placeholder="Conte um pouco sobre você e seu estilo..."
+                        value={user.bio || ''}
+                        onChange={handleInputChange}
+                        className="mt-2"
+                    />
+                    </div>
                 </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="style" className="mt-6">
-                 <div className="space-y-6">
-                    <div>
-                        <Label className="text-base font-medium">Seus Estilos</Label>
-                        <p className="text-sm text-muted-foreground">Selecione os estilos que mais te representam.</p>
-                        <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                            {availableStyles.map(style => (
-                                <div key={style} className="flex items-center space-x-2">
-                                    <Checkbox id={`style-${style}`} checked={estilos.includes(style.toLowerCase())} onCheckedChange={() => handleStyleChange(style.toLowerCase())}/>
-                                    <Label htmlFor={`style-${style}`} className="font-normal">{style}</Label>
+                </CardHeader>
+                <CardContent>
+                <Tabs defaultValue="personal">
+                    <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="personal">Informações Pessoais</TabsTrigger>
+                    <TabsTrigger value="style">Preferências de Estilo</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="personal" className="mt-6">
+                    <div className="space-y-6">
+                        <div className="grid gap-4 md:grid-cols-2">
+                        <div className="grid gap-2">
+                            <Label htmlFor="name">Nome</Label>
+                            <Input id="name" value={user.name} onChange={handleInputChange} />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" type="email" value={user.email} onChange={handleInputChange}/>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="gender">Gênero</Label>
+                            <Select value={user.genero} onValueChange={handleSelectChange('genero')}>
+                            <SelectTrigger id="gender">
+                                <SelectValue placeholder="Selecione o gênero" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="feminino">Feminino</SelectItem>
+                                <SelectItem value="masculino">Masculino</SelectItem>
+                                <SelectItem value="outro">Outro</SelectItem>
+                            </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="mannequin">Preferência de Manequim</Label>
+                            <Select value={user.preferenciaManequim} onValueChange={handleSelectChange('preferenciaManequim')}>
+                            <SelectTrigger id="mannequin">
+                                <SelectValue placeholder="Selecione a preferência" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="feminino">Feminino</SelectItem>
+                                <SelectItem value="masculino">Masculino</SelectItem>
+                                <SelectItem value="neutro">Neutro</SelectItem>
+                            </SelectContent>
+                            </Select>
+                        </div>
+                        </div>
+                    </div>
+                    </TabsContent>
+                    <TabsContent value="style" className="mt-6">
+                        <div className="space-y-6">
+                            <div>
+                                <Label className="text-base font-medium">Seus Estilos</Label>
+                                <p className="text-sm text-muted-foreground">Selecione os estilos que mais te representam.</p>
+                                <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                                    {availableStyles.map(style => (
+                                        <div key={style} className="flex items-center space-x-2">
+                                            <Checkbox id={`style-${style}`} checked={estilos.includes(style.toLowerCase())} onCheckedChange={() => handleStyleChange(style.toLowerCase())}/>
+                                            <Label htmlFor={`style-${style}`} className="font-normal">{style}</Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <Label className="text-base font-medium">Cores Favoritas</Label>
+                                <p className="text-sm text-muted-foreground">Adicione as cores que você mais gosta de usar.</p>
+                                <div className="mt-4 flex gap-2">
+                                    <Input value={corInput} onChange={e => setCorInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTag('cores'))} placeholder="Digite uma cor e pressione Enter" />
+                                    <Button type="button" onClick={() => addTag('cores')}>Adicionar</Button>
+                                </div>
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                    {cores.map(cor => (
+                                        <Badge key={cor} variant="secondary" className="flex items-center gap-1 pr-1">
+                                            {cor}
+                                            <button type="button" onClick={() => removeTag('cores', cor)} className="rounded-full hover:bg-background">
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </Badge>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <Label className="text-base font-medium">Peças-Chave</Label>
+                                <p className="text-sm text-muted-foreground">Quais são as peças essenciais no seu guarda-roupa?</p>
+                                <div className="mt-4 flex gap-2">
+                                    <Input value={pecaInput} onChange={e => setPecaInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTag('pecas'))} placeholder="Digite uma peça e pressione Enter" />
+                                    <Button type="button" onClick={() => addTag('pecas')}>Adicionar</Button>
+                                </div>
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                    {pecas.map(peca => (
+                                        <Badge key={peca} variant="secondary" className="flex items-center gap-1 pr-1">
+                                            {peca}
+                                            <button type="button" onClick={() => removeTag('pecas', peca)} className="rounded-full hover:bg-background">
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </Badge>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </TabsContent>
+                </Tabs>
+                </CardContent>
+            </Card>
+        </TabsContent>
+        <TabsContent value="saved">
+             <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Bookmark />
+                        Meus Looks Salvos
+                    </CardTitle>
+                    <CardDescription>Sua coleção de looks favoritos e trajes gerados por IA.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {savedLooks.length > 0 ? (
+                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                            {savedLooks.map(post => (
+                                <div key={post.id} className="group relative">
+                                    <Image 
+                                        src={post.imageUrl}
+                                        alt={post.legenda}
+                                        width={400}
+                                        height={600}
+                                        className="rounded-lg object-cover aspect-[3/4]"
+                                    />
+                                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-white opacity-0 transition-opacity group-hover:opacity-100 rounded-b-lg">
+                                        <p className="text-sm line-clamp-2">{post.legenda}</p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
-                    </div>
-                    <div>
-                         <Label className="text-base font-medium">Cores Favoritas</Label>
-                        <p className="text-sm text-muted-foreground">Adicione as cores que você mais gosta de usar.</p>
-                        <div className="mt-4 flex gap-2">
-                            <Input value={corInput} onChange={e => setCorInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTag('cores'))} placeholder="Digite uma cor e pressione Enter" />
-                            <Button type="button" onClick={() => addTag('cores')}>Adicionar</Button>
+                    ) : (
+                         <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg">
+                            <Bookmark className="h-10 w-10 mb-2" />
+                            <p className="font-semibold">Nenhum look salvo ainda</p>
+                            <p className="text-sm">Salve looks do feed ou gere novos com a IA!</p>
                         </div>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                            {cores.map(cor => (
-                                <Badge key={cor} variant="secondary" className="flex items-center gap-1 pr-1">
-                                    {cor}
-                                    <button type="button" onClick={() => removeTag('cores', cor)} className="rounded-full hover:bg-background">
-                                        <X className="h-3 w-3" />
-                                    </button>
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                     <div>
-                         <Label className="text-base font-medium">Peças-Chave</Label>
-                        <p className="text-sm text-muted-foreground">Quais são as peças essenciais no seu guarda-roupa?</p>
-                        <div className="mt-4 flex gap-2">
-                            <Input value={pecaInput} onChange={e => setPecaInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTag('pecas'))} placeholder="Digite uma peça e pressione Enter" />
-                            <Button type="button" onClick={() => addTag('pecas')}>Adicionar</Button>
-                        </div>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                            {pecas.map(peca => (
-                                <Badge key={peca} variant="secondary" className="flex items-center gap-1 pr-1">
-                                    {peca}
-                                    <button type="button" onClick={() => removeTag('pecas', peca)} className="rounded-full hover:bg-background">
-                                        <X className="h-3 w-3" />
-                                    </button>
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                 </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+                    )}
+                </CardContent>
+            </Card>
+        </TabsContent>
+      </Tabs>
     </form>
   );
 }
