@@ -48,15 +48,14 @@ export default function BuilderPage() {
   
     // Em um app real, você salvaria isso no backend.
     // Aqui, vamos simular adicionando a um estado local ou a uma lista mock.
-    // Por simplicidade, vamos apenas exibir um toast.
     setSalvo(true);
     toast({
       title: "Look Salvo!",
       description: "O traje foi adicionado à sua coleção no perfil.",
     });
 
-    // O ideal seria ter uma lista de looks salvos no mockUser
-    // e adicionar este look a ela. Vamos simular isso:
+    // Esta é uma simulação e não persistirá entre as sessões.
+    // Para persistir, precisaríamos de gerenciamento de estado global ou chamadas de API.
     const newPost: PostagemFeed = {
         id: `post-generated-${Date.now()}`,
         autor: { id: mockUser.id, name: mockUser.name, avatarUrl: mockUser.avatarUrl || '' },
@@ -67,13 +66,14 @@ export default function BuilderPage() {
         salvo: true,
         itens: [], 
     };
-    // Esta é uma simulação, não persistirá. Para persistir,
-    // precisaríamos de gerenciamento de estado global ou chamadas de API.
+    
+    // Adicionando o post ao mock para refletir na página de perfil (simulação)
+    feedPosts.unshift(newPost);
     console.log("Novo look salvo (simulação):", newPost);
   };
 
   return (
-    <div className="grid h-full min-h-[calc(100vh-8rem)] gap-6 lg:grid-cols-5">
+    <div className="grid h-full min-h-[calc(100vh-8rem)] grid-cols-1 gap-6 lg:grid-cols-5">
       <div className="lg:col-span-2">
         <form onSubmit={handleGenerate}>
           <Card>
@@ -110,9 +110,9 @@ export default function BuilderPage() {
       </div>
 
       <div className="lg:col-span-3">
-        <Card className="flex h-full min-h-[500px] w-full items-center justify-center">
+        <Card className="flex h-full min-h-[500px] w-full items-center justify-center p-4">
           {carregando && (
-            <div className="flex flex-col items-center gap-4 text-muted-foreground">
+            <div className="flex flex-col items-center gap-4 text-center text-muted-foreground">
               <Loader2 className="h-12 w-12 animate-spin text-accent" />
               <p className="font-semibold">Nossa IA está montando seu estilo...</p>
               <p className="text-sm">Isso pode levar um momento.</p>
@@ -128,8 +128,8 @@ export default function BuilderPage() {
           )}
 
           {!carregando && resultado && (
-            <CardContent className="flex w-full flex-col items-center gap-6 p-6 md:flex-row">
-                 <div className="relative h-[450px] w-full max-w-[300px] flex-shrink-0">
+            <CardContent className="flex w-full flex-col items-center gap-6 p-0 md:flex-row md:items-start">
+                 <div className="relative h-[400px] w-full max-w-[280px] flex-shrink-0 md:h-[450px]">
                     <Image src={resultado.mannequinPhotoDataUri} alt="Traje gerado" fill className="rounded-lg object-cover" />
                  </div>
                  <div className="flex w-full flex-col space-y-4">

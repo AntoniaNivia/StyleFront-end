@@ -19,8 +19,8 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { mockUser, guardaRoupa } from '@/lib/data';
-import type { ItemDeVestuario } from '@/lib/types';
+import { mockUser, guardaRoupa, feedPosts } from '@/lib/data';
+import type { ItemDeVestuario, PostagemFeed } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { Loader2, Sparkles, Wand, Star } from 'lucide-react';
@@ -107,15 +107,24 @@ export default function ManualBuilderPage() {
     });
     
     // Simulação de salvamento, como em outras partes do app
-    console.log("Look manual salvo (simulação):", {
-        description: getDescricaoTraje(),
-        imageUrl: imagemManequim
-    });
+     const newPost: PostagemFeed = {
+        id: `post-manual-${Date.now()}`,
+        autor: { id: mockUser.id, name: mockUser.name, avatarUrl: mockUser.avatarUrl || '' },
+        imageUrl: imagemManequim,
+        legenda: `Look manual: ${getDescricaoTraje()}`,
+        curtidas: 0,
+        curtido: false,
+        salvo: true,
+        itens: Object.values(lookSelecionado).filter(Boolean) as ItemDeVestuario[],
+    };
+    
+    feedPosts.unshift(newPost);
+    console.log("Look manual salvo (simulação):", newPost);
   };
 
 
   return (
-    <div className="grid h-full min-h-[calc(100vh-8rem)] gap-6 lg:grid-cols-5">
+    <div className="grid h-full min-h-[calc(100vh-8rem)] grid-cols-1 gap-6 lg:grid-cols-5">
       <div className="lg:col-span-2">
         <Card>
           <CardHeader>
@@ -125,7 +134,7 @@ export default function ManualBuilderPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ScrollArea className="h-[60vh] pr-4">
+            <ScrollArea className="h-[calc(100vh-22rem)] pr-4 md:h-[60vh]">
               <div className="space-y-6">
                 {categorias.map(({ id, nome, tipos }) => {
                   const itensFiltrados = guardaRoupa.filter((item) =>
@@ -162,7 +171,7 @@ export default function ManualBuilderPage() {
         <div className="flex h-full flex-col gap-4">
           <Card className="flex h-full min-h-[500px] w-full items-center justify-center">
              {carregando && (
-              <div className="flex flex-col items-center gap-4 text-muted-foreground">
+              <div className="flex flex-col items-center gap-4 text-center text-muted-foreground">
                 <Loader2 className="h-12 w-12 animate-spin text-accent" />
                 <p className="font-semibold">Montando seu manequim...</p>
               </div>
@@ -177,7 +186,7 @@ export default function ManualBuilderPage() {
             )}
             
             {!carregando && imagemManequim && (
-                <div className="relative h-full w-full p-6">
+                <div className="relative h-full w-full p-4">
                     <Image
                         src={imagemManequim}
                         alt="Look montado manualmente"
@@ -187,7 +196,7 @@ export default function ManualBuilderPage() {
                 </div>
             )}
           </Card>
-           <div className="flex gap-4">
+           <div className="flex flex-col gap-4 sm:flex-row">
             <Button
               onClick={handleGenerateMannequin}
               className="w-full bg-accent hover:bg-accent/90"

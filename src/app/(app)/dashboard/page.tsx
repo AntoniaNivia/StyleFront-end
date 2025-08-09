@@ -15,8 +15,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function DashboardPage() {
   const usuario = mockUser;
-  const [guardaRoupa, setGuardaRoupa] = useState(initialGuardaRoupa)
-  const [feedPosts, setFeedPosts] = useState(initialFeedPosts)
+  const [guardaRoupa] = useState(initialGuardaRoupa)
+  const [feedPosts] = useState(initialFeedPosts)
 
   const [lookDoDia, setLookDoDia] = useState<GerarTrajeOutput | null>(null)
   const [carregandoLook, setCarregandoLook] = useState(true)
@@ -29,6 +29,7 @@ export default function DashboardPage() {
         const look = await gerarLookDoDia()
         setLookDoDia(look)
       } catch (error) {
+        console.error(error)
         toast({
           title: "Erro ao Gerar Look",
           description: "Não foi possível buscar a sugestão de look do dia.",
@@ -46,7 +47,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Bem-vindo(a) de volta, {usuario.name}!</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Bem-vindo(a) de volta, {usuario.name.split(' ')[0]}!</h1>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -77,10 +78,10 @@ export default function DashboardPage() {
             <CardTitle>Look do Dia</CardTitle>
             <CardDescription>Uma sugestão de traje especial, só para você!</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col items-center gap-4 md:flex-row">
+          <CardContent className="flex flex-col items-center gap-6 md:flex-row">
             {carregandoLook ? (
               <div className="flex w-full flex-col items-center gap-4 md:flex-row">
-                 <Skeleton className="relative h-[400px] w-full max-w-[250px] flex-shrink-0 rounded-lg" />
+                 <Skeleton className="relative h-[350px] w-full max-w-[250px] flex-shrink-0 rounded-lg md:h-[400px]" />
                  <div className="w-full space-y-4">
                     <Skeleton className="h-6 w-3/4" />
                     <Skeleton className="h-20 w-full" />
@@ -89,7 +90,7 @@ export default function DashboardPage() {
               </div>
             ) : lookDoDia && (
               <>
-                <div className="relative h-[400px] w-full max-w-[250px] flex-shrink-0">
+                <div className="relative h-[350px] w-full max-w-[250px] flex-shrink-0 md:h-[400px]">
                    <Image src={lookDoDia.mannequinPhotoDataUri} alt="Look do dia" fill className="rounded-lg object-cover" data-ai-hint="fashion mannequin" />
                 </div>
                 <div className="space-y-4">

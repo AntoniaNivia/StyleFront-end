@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, type ReactNode } from 'react';
@@ -18,6 +19,7 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { analisarImagem } from '@/actions/wardrobe';
 import { useForm, Controller } from 'react-hook-form';
+import type { ItemDeVestuario } from '@/lib/types';
 
 type FormValues = {
   name: string;
@@ -33,7 +35,7 @@ export function AddItemDialog({
   onItemAdded,
 }: {
   children: ReactNode;
-  onItemAdded: (item: any) => void;
+  onItemAdded: (item: ItemDeVestuario) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -112,7 +114,7 @@ export function AddItemDialog({
       });
       return;
     }
-    const newItem = {
+    const newItem: ItemDeVestuario = {
       id: `item-${Date.now()}`,
       userId: 'user-1', // Mock user
       imageUrl: imageData,

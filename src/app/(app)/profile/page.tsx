@@ -125,7 +125,7 @@ export default function ProfilePage() {
 
   const handleUnlike = (postId: string) => {
     setFeedPosts(posts => posts.map(post =>
-      post.id === postId ? { ...post, curtido: false, curtidas: post.curtidas - 1 } : post
+      post.id === postId ? { ...post, curtido: false, curtidas: post.curtidas > 0 ? post.curtidas - 1 : 0 } : post
     ));
     setSelectedLook(null);
     toast({
@@ -142,14 +142,14 @@ export default function ProfilePage() {
   return (
     <>
     <form onSubmit={handleSaveChanges} className="space-y-6">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Meu Perfil</h1>
           <p className="text-muted-foreground">
             Gerencie sua conta e personalize suas preferências de estilo.
           </p>
         </div>
-         <Button type="submit" className="bg-accent hover:bg-accent/90">
+         <Button type="submit" className="w-full sm:w-auto bg-accent hover:bg-accent/90">
             Salvar Alterações
         </Button>
       </div>
@@ -163,7 +163,7 @@ export default function ProfilePage() {
         <TabsContent value="profile">
             <Card>
                 <CardHeader>
-                <div className="flex items-center gap-6">
+                <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
                     <Avatar className="h-24 w-24 cursor-pointer border-4 border-primary">
                     <AvatarImage src={user.avatarUrl} alt={user.name} />
                     <AvatarFallback className="text-3xl">
@@ -171,8 +171,8 @@ export default function ProfilePage() {
                     </AvatarFallback>
                     </Avatar>
                     <div className='w-full'>
-                    <CardTitle className="text-3xl">{user.name}</CardTitle>
-                    <CardDescription className="mt-1">
+                    <CardTitle className="text-3xl text-center sm:text-left">{user.name}</CardTitle>
+                    <CardDescription className="mt-1 text-center sm:text-left">
                         <Badge variant="secondary" className="capitalize">
                         {user.type} Usuário
                         </Badge>
@@ -195,7 +195,7 @@ export default function ProfilePage() {
                     </TabsList>
                     <TabsContent value="personal" className="mt-6">
                     <div className="space-y-6">
-                        <div className="grid gap-4 md:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div className="grid gap-2">
                             <Label htmlFor="name">Nome</Label>
                             <Input id="name" value={user.name} onChange={handleInputChange} />
@@ -250,9 +250,9 @@ export default function ProfilePage() {
                             <div>
                                 <Label className="text-base font-medium">Cores Favoritas</Label>
                                 <p className="text-sm text-muted-foreground">Adicione as cores que você mais gosta de usar.</p>
-                                <div className="mt-4 flex gap-2">
+                                <div className="mt-4 flex flex-col sm:flex-row gap-2">
                                     <Input value={corInput} onChange={e => setCorInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTag('cores'))} placeholder="Digite uma cor e pressione Enter" />
-                                    <Button type="button" onClick={() => addTag('cores')}>Adicionar</Button>
+                                    <Button type="button" onClick={() => addTag('cores')} className="w-full sm:w-auto">Adicionar</Button>
                                 </div>
                                 <div className="mt-2 flex flex-wrap gap-2">
                                     {cores.map(cor => (
@@ -268,9 +268,9 @@ export default function ProfilePage() {
                             <div>
                                 <Label className="text-base font-medium">Peças-Chave</Label>
                                 <p className="text-sm text-muted-foreground">Quais são as peças essenciais no seu guarda-roupa?</p>
-                                <div className="mt-4 flex gap-2">
+                                <div className="mt-4 flex flex-col sm:flex-row gap-2">
                                     <Input value={pecaInput} onChange={e => setPecaInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTag('pecas'))} placeholder="Digite uma peça e pressione Enter" />
-                                    <Button type="button" onClick={() => addTag('pecas')}>Adicionar</Button>
+                                    <Button type="button" onClick={() => addTag('pecas')} className="w-full sm:w-auto">Adicionar</Button>
                                 </div>
                                 <div className="mt-2 flex flex-wrap gap-2">
                                     {pecas.map(peca => (
