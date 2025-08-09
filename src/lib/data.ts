@@ -8,6 +8,10 @@ export const mockUser: Usuario = {
   type: 'regular',
   genero: 'feminino',
   preferenciaManequim: 'feminino',
+  bio: 'Amante de moda, explorando novos estilos e compartilhando minhas descobertas. Adoro peças vintage e um toque de cor.',
+  estilosPreferidos: ['vintage', 'casual', 'boêmio'],
+  coresFavoritas: ['mostarda', 'terracota', 'azul marinho'],
+  pecasChave: ['Jaqueta de couro', 'Vestido floral', 'Bota de cano curto'],
 };
 
 export const mockStoreUser: Usuario = {

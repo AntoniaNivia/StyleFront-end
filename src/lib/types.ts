@@ -6,6 +6,10 @@ export type Usuario = {
   type: 'regular' | 'store';
   genero?: 'masculino' | 'feminino' | 'outro';
   preferenciaManequim?: 'masculino' | 'feminino' | 'neutro';
+  bio?: string;
+  estilosPreferidos?: string[];
+  coresFavoritas?: string[];
+  pecasChave?: string[];
 };
 
 export type ItemDeVestuario = {
