@@ -12,9 +12,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { mockUser, feedPosts } from '@/lib/data';
+import { mockUser, feedPosts as initialFeedPosts } from '@/lib/data';
+import type { PostagemFeed } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import {
   Select,
@@ -26,18 +36,20 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
-import { X, Bookmark } from 'lucide-react';
+import { X, Bookmark, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 
 const availableStyles = ['Casual', 'Formal', 'Esportivo', 'Vintage', 'Moderno', 'Boêmio', 'Minimalista'];
 
 export default function ProfilePage() {
   const [user, setUser] = useState(mockUser);
+  const [feedPosts, setFeedPosts] = useState(initialFeedPosts);
   const [estilos, setEstilos] = useState(user.estilosPreferidos || []);
   const [cores, setCores] = useState(user.coresFavoritas || []);
   const [pecas, setPecas] = useState(user.pecasChave || []);
   const [corInput, setCorInput] = useState('');
   const [pecaInput, setPecaInput] = useState('');
+  const [selectedLook, setSelectedLook] = useState<PostagemFeed | null>(null);
 
   const { toast } = useToast();
 
@@ -96,7 +108,19 @@ export default function ProfilePage() {
     });
   };
 
+  const handleRemoveFromSaved = (postId: string) => {
+    setFeedPosts(posts => posts.map(post => 
+      post.id === postId ? { ...post, salvo: false } : post
+    ));
+    setSelectedLook(null);
+    toast({
+        title: "Look Removido",
+        description: "O look foi removido da sua coleção."
+    });
+  }
+
   return (
+    <>
     <form onSubmit={handleSaveChanges} className="space-y-6">
       <div className="flex items-start justify-between">
         <div>
@@ -257,18 +281,19 @@ export default function ProfilePage() {
                     {savedLooks.length > 0 ? (
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                             {savedLooks.map(post => (
-                                <div key={post.id} className="group relative">
+                                <button key={post.id} className="group relative rounded-lg overflow-hidden" onClick={() => setSelectedLook(post)}>
                                     <Image 
                                         src={post.imageUrl}
                                         alt={post.legenda}
                                         width={400}
                                         height={600}
-                                        className="rounded-lg object-cover aspect-[3/4]"
+                                        className="object-cover aspect-[3/4] w-full h-full transition-transform duration-300 group-hover:scale-105"
                                     />
+                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-white opacity-0 transition-opacity group-hover:opacity-100 rounded-b-lg">
                                         <p className="text-sm line-clamp-2">{post.legenda}</p>
                                     </div>
-                                </div>
+                                </button>
                             ))}
                         </div>
                     ) : (
@@ -283,5 +308,37 @@ export default function ProfilePage() {
         </TabsContent>
       </Tabs>
     </form>
+
+    <Dialog open={!!selectedLook} onOpenChange={(isOpen) => !isOpen && setSelectedLook(null)}>
+        <DialogContent className="max-w-md">
+            {selectedLook && (
+                <>
+                    <DialogHeader>
+                        <DialogTitle>{selectedLook.legenda}</DialogTitle>
+                        <DialogDescription>
+                            Por {selectedLook.autor.name}
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="relative aspect-[3/4] w-full my-4 rounded-lg overflow-hidden">
+                         <Image src={selectedLook.imageUrl} alt={selectedLook.legenda} fill className="object-cover"/>
+                    </div>
+                    <DialogFooter className="sm:justify-between gap-2">
+                        <Button variant="destructive" onClick={() => handleRemoveFromSaved(selectedLook.id)}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Remover dos Salvos
+                        </Button>
+                        <DialogClose asChild>
+                            <Button type="button" variant="secondary">
+                                Fechar
+                            </Button>
+                        </DialogClose>
+                    </DialogFooter>
+                </>
+            )}
+        </DialogContent>
+    </Dialog>
+    </>
   );
 }
+
+    
