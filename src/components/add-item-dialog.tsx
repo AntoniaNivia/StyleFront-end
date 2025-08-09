@@ -116,7 +116,7 @@ export function AddItemDialog({
     }
     const newItem: ItemDeVestuario = {
       id: `item-${Date.now()}`,
-      userId: 'user-1', // Mock user
+  userId: '', // TODO: Definir userId real via props/contexto
       imageUrl: imageData,
       name: data.name,
       tipo: data.tipo,

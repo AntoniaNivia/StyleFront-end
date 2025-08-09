@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { AddItemDialog } from '@/components/add-item-dialog';
-import { guardaRoupa as initialGuardaRoupa } from '@/lib/data';
+// ...existing code...
 import type { ItemDeVestuario } from '@/lib/types';
 import { PlusCircle } from 'lucide-react';
 import Image from 'next/image';
 
 export default function WardrobePage() {
-  const [guardaRoupa, setGuardaRoupa] = useState<ItemDeVestuario[]>(initialGuardaRoupa);
+  const [guardaRoupa, setGuardaRoupa] = useState<ItemDeVestuario[]>([]); // TODO: Carregar do backend/autenticação
 
   const handleItemAdded = (newItem: ItemDeVestuario) => {
     setGuardaRoupa((prev) => [newItem, ...prev]);

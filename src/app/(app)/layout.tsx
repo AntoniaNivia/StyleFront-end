@@ -25,7 +25,7 @@ import {
 import { UserNav } from "@/components/user-nav"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { mockUser } from "@/lib/data"
+// ...existing code...
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Painel" },
@@ -42,7 +42,8 @@ const storeNavItems = [
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const user = mockUser; // Em um app real, você obteria isso de uma sessão
+  // TODO: Obter usuário real via autenticação/contexto
+  const user = { name: '', type: '' };
 
   return (
     <SidebarProvider>

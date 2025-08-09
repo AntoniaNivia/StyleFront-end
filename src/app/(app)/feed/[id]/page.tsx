@@ -3,7 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { feedPosts as initialFeedPosts } from "@/lib/data";
+// ...existing code...
 import { Bookmark, Heart, Send } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +11,7 @@ import { notFound } from "next/navigation";
 import { useState } from "react";
 
 export default function FeedDetailPage({ params }: { params: { id: string } }) {
-  const [feedPosts, setFeedPosts] = useState(initialFeedPosts);
+  const [feedPosts, setFeedPosts] = useState<any[]>([]); // TODO: Carregar posts reais
   const post = feedPosts.find((p) => p.id === params.id);
 
   if (!post) {

@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { mockUser, guardaRoupa, feedPosts } from '@/lib/data';
+// ...existing code...
 import type { ItemDeVestuario, PostagemFeed } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
@@ -45,6 +45,9 @@ export default function ManualBuilderPage() {
   const [imagemManequim, setImagemManequim] = useState<string | null>(null);
   const [carregando, setCarregando] = useState(false);
   const [salvo, setSalvo] = useState(false);
+  const guardaRoupa: ItemDeVestuario[] = []; // TODO: Carregar do backend/autenticação
+  const mockUser = { preferenciaManequim: 'neutro', id: '', name: '', avatarUrl: '' }; // TODO: Remover e usar dados reais
+  const feedPosts: PostagemFeed[] = []; // TODO: Remover e usar dados reais
   const { toast } = useToast();
 
   const handleSelectChange = (categoria: Categoria, itemId: string) => {

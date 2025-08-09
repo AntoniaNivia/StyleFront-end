@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { mockUser, guardaRoupa as initialGuardaRoupa, feedPosts as initialFeedPosts } from "@/lib/data"
+// ...existing code...
 import { Shirt, Sparkles, Star, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -14,9 +14,9 @@ import type { GerarTrajeOutput } from "@/ai/flows/gerar-traje"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export default function DashboardPage() {
-  const usuario = mockUser;
-  const [guardaRoupa] = useState(initialGuardaRoupa)
-  const [feedPosts] = useState(initialFeedPosts)
+  const usuario = { name: '' }; // TODO: Carregar usuário real
+  const [guardaRoupa] = useState<any[]>([]); // TODO: Carregar guarda-roupa real
+  const [feedPosts] = useState<any[]>([]); // TODO: Carregar posts reais
 
   const [lookDoDia, setLookDoDia] = useState<GerarTrajeOutput | null>(null)
   const [carregandoLook, setCarregandoLook] = useState(true)

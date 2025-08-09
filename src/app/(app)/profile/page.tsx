@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { mockUser, feedPosts as initialFeedPosts } from '@/lib/data';
+// ...existing code...
 import type { PostagemFeed } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -44,8 +44,8 @@ const availableStyles = ['Casual', 'Formal', 'Esportivo', 'Vintage', 'Moderno', 
 type DialogMode = 'saved' | 'liked';
 
 export default function ProfilePage() {
-  const [user, setUser] = useState(mockUser);
-  const [feedPosts, setFeedPosts] = useState(initialFeedPosts);
+    const [user, setUser] = useState<any>({}); // TODO: Carregar usuário real
+    const [feedPosts, setFeedPosts] = useState<any[]>([]); // TODO: Carregar posts reais
   const [estilos, setEstilos] = useState(user.estilosPreferidos || []);
   const [cores, setCores] = useState(user.coresFavoritas || []);
   const [pecas, setPecas] = useState(user.pecasChave || []);

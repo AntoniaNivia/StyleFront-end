@@ -15,11 +15,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { mockUser } from "@/lib/data"
+// ...existing code...
 import Link from "next/link"
 
 export function UserNav() {
-  const user = mockUser;
+  // TODO: Receber usuário real via props/contexto
+  const user = {
+    name: '',
+    email: '',
+    avatarUrl: '',
+  };
 
   return (
     <DropdownMenu>

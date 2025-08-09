@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import { feedPosts as initialFeedPosts } from "@/lib/data";
+// ...existing code...
 import { Heart, Bookmark } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function FeedPage() {
-  const [feedPosts, setFeedPosts] = useState(initialFeedPosts);
+  const [feedPosts, setFeedPosts] = useState<any[]>([]); // TODO: Carregar posts reais
 
   const toggleLike = (id: string) => {
     setFeedPosts(posts => posts.map(post => 
