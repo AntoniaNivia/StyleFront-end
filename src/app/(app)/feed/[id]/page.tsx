@@ -20,7 +20,7 @@ export default function FeedDetailPage({ params }: { params: { id: string } }) {
       <div className="lg:col-span-2">
         <Card className="overflow-hidden">
           <div className="relative aspect-[4/5]">
-            <Image src={post.imageUrl} alt={post.caption} fill className="object-cover" data-ai-hint="fashion model" />
+            <Image src={post.imageUrl} alt={post.legenda} fill className="object-cover" data-ai-hint="fashion model" />
           </div>
         </Card>
       </div>
@@ -28,35 +28,35 @@ export default function FeedDetailPage({ params }: { params: { id: string } }) {
       <div className="space-y-6">
         <div className="flex items-center gap-4">
             <Avatar className="h-12 w-12">
-                <AvatarImage src={post.author.avatarUrl} />
-                <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+                <AvatarImage src={post.autor.avatarUrl} />
+                <AvatarFallback>{post.autor.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div>
-                <p className="font-bold text-lg">{post.author.name}</p>
-                <p className="text-muted-foreground">{post.caption}</p>
+                <p className="font-bold text-lg">{post.autor.name}</p>
+                <p className="text-muted-foreground">{post.legenda}</p>
             </div>
         </div>
 
         <div className="flex items-center gap-2">
             <Button size="icon" variant="outline">
-                <Heart className="h-5 w-5 text-red-500" fill={post.isLiked ? "currentColor" : "none"} />
+                <Heart className="h-5 w-5 text-red-500" fill={post.curtido ? "currentColor" : "none"} />
             </Button>
             <Button size="icon" variant="outline">
-                <Bookmark className="h-5 w-5 text-blue-500" fill={post.isSaved ? "currentColor" : "none"}/>
+                <Bookmark className="h-5 w-5 text-blue-500" fill={post.salvo ? "currentColor" : "none"}/>
             </Button>
             <Button size="icon" variant="outline">
                 <Send className="h-5 w-5" />
             </Button>
-            <p className="text-sm text-muted-foreground ml-2">{post.likes} likes</p>
+            <p className="text-sm text-muted-foreground ml-2">{post.curtidas} curtidas</p>
         </div>
 
-        {post.items.length > 0 && (
+        {post.itens.length > 0 && (
             <Card>
                 <CardHeader>
-                    <CardTitle>Items in this Look</CardTitle>
+                    <CardTitle>Itens neste Look</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    {post.items.map(item => (
+                    {post.itens.map(item => (
                         <div key={item.id} className="flex items-center gap-4">
                             <div className="relative h-16 w-16 flex-shrink-0 rounded-md overflow-hidden">
                                 <Image src={item.imageUrl} alt={item.name} fill className="object-cover"/>
@@ -64,7 +64,7 @@ export default function FeedDetailPage({ params }: { params: { id: string } }) {
                             <div>
                                 <p className="font-semibold">{item.name}</p>
                                 <Button variant="link" className="p-0 h-auto" asChild>
-                                    <Link href="/wardrobe">View item</Link>
+                                    <Link href="/wardrobe">Ver item</Link>
                                 </Button>
                             </div>
                         </div>

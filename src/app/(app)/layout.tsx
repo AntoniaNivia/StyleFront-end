@@ -26,20 +26,20 @@ import Link from "next/link"
 import { mockUser } from "@/lib/data"
 
 const navItems = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/wardrobe", icon: Shirt, label: "Wardrobe" },
-  { href: "/builder", icon: Sparkles, label: "AI Builder" },
-  { href: "/feed", icon: Heart, label: "Inspiration" },
-  { href: "/profile", icon: User, label: "Profile" },
+  { href: "/dashboard", icon: LayoutDashboard, label: "Painel" },
+  { href: "/wardrobe", icon: Shirt, label: "Guarda-Roupa" },
+  { href: "/builder", icon: Sparkles, label: "Criador IA" },
+  { href: "/feed", icon: Heart, label: "Inspiração" },
+  { href: "/profile", icon: User, label: "Perfil" },
 ]
 
 const storeNavItems = [
-    { href: "/post", icon: PlusSquare, label: "Post to Feed" },
+    { href: "/post", icon: PlusSquare, label: "Postar no Feed" },
 ]
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const user = mockUser; // In a real app, you'd get this from a session
+  const user = mockUser; // Em um app real, você obteria isso de uma sessão
 
   return (
     <SidebarProvider>

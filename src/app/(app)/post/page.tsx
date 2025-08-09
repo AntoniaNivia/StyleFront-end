@@ -26,10 +26,10 @@ export default function PostPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, handle form submission to backend
+    // Em um aplicativo real, lide com o envio do formulário para o backend
     toast({
-        title: "Post Created!",
-        description: "Your new look has been added to the feed."
+        title: "Post Criado!",
+        description: "Seu novo look foi adicionado ao feed."
     })
     setImagePreview(null);
     (e.target as HTMLFormElement).reset();
@@ -38,22 +38,22 @@ export default function PostPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Post to Feed</h1>
-          <p className="text-muted-foreground">Share a new look with the StyleWise community.</p>
+          <h1 className="text-3xl font-bold tracking-tight">Postar no Feed</h1>
+          <p className="text-muted-foreground">Compartilhe um novo look com a comunidade Style.</p>
         </div>
       <form onSubmit={handleSubmit}>
         <Card>
           <CardContent className="p-6 space-y-6">
              <div className="space-y-2">
-              <Label htmlFor="picture">Post Image</Label>
+              <Label htmlFor="picture">Imagem do Post</Label>
               <div className="relative flex h-80 w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/50 bg-secondary/50 text-center">
                 {imagePreview ? (
                   <Image src={imagePreview} alt="Preview" fill className="object-contain p-2" />
                 ) : (
                   <div className="space-y-2 text-muted-foreground">
                     <ImageIcon className="mx-auto h-12 w-12" />
-                    <p className="font-semibold">Click to upload or drag & drop</p>
-                     <p className="text-xs">PNG, JPG, or GIF</p>
+                    <p className="font-semibold">Clique para enviar ou arraste e solte</p>
+                     <p className="text-xs">PNG, JPG ou GIF</p>
                   </div>
                 )}
                 <Input
@@ -67,17 +67,17 @@ export default function PostPage() {
               </div>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="caption">Caption</Label>
+              <Label htmlFor="caption">Legenda</Label>
               <Textarea
                 id="caption"
-                placeholder="Describe the look, share some style tips..."
+                placeholder="Descreva o look, compartilhe algumas dicas de estilo..."
                 rows={4}
                 required
               />
             </div>
             <div>
               <Button type="submit" className="w-full bg-accent hover:bg-accent/90">
-                Create Post
+                Criar Post
               </Button>
             </div>
           </CardContent>

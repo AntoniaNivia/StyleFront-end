@@ -12,8 +12,8 @@ export default function ProfilePage() {
     return (
         <div className="mx-auto max-w-4xl space-y-6">
              <div>
-                <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
-                <p className="text-muted-foreground">Manage your account and preferences.</p>
+                <h1 className="text-3xl font-bold tracking-tight">Meu Perfil</h1>
+                <p className="text-muted-foreground">Gerencie sua conta e preferências.</p>
             </div>
 
             <Card>
@@ -26,7 +26,7 @@ export default function ProfilePage() {
                         <div>
                             <CardTitle className="text-3xl">{user.name}</CardTitle>
                             <CardDescription className="mt-1">
-                                <Badge variant="secondary" className="capitalize">{user.type} User</Badge>
+                                <Badge variant="secondary" className="capitalize">{user.type} Usuário</Badge>
                             </CardDescription>
                         </div>
                     </div>
@@ -34,7 +34,7 @@ export default function ProfilePage() {
                 <CardContent className="space-y-6">
                     <div className="grid gap-4 md:grid-cols-2">
                         <div className="grid gap-2">
-                            <Label htmlFor="name">Name</Label>
+                            <Label htmlFor="name">Nome</Label>
                             <Input id="name" defaultValue={user.name} />
                         </div>
                         <div className="grid gap-2">
@@ -42,16 +42,16 @@ export default function ProfilePage() {
                             <Input id="email" type="email" defaultValue={user.email} />
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="gender">Gender</Label>
-                            <Input id="gender" defaultValue={user.gender} className="capitalize" />
+                            <Label htmlFor="gender">Gênero</Label>
+                            <Input id="gender" defaultValue={user.genero} className="capitalize" />
                         </div>
                          <div className="grid gap-2">
-                            <Label htmlFor="mannequin">Mannequin Preference</Label>
-                            <Input id="mannequin" defaultValue={user.mannequinPreference} className="capitalize" />
+                            <Label htmlFor="mannequin">Preferência de Manequim</Label>
+                            <Input id="mannequin" defaultValue={user.preferenciaManequim} className="capitalize" />
                         </div>
                     </div>
                     <div className="flex justify-end">
-                        <Button className="bg-accent hover:bg-accent/90">Save Changes</Button>
+                        <Button className="bg-accent hover:bg-accent/90">Salvar Alterações</Button>
                     </div>
                 </CardContent>
             </Card>

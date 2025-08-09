@@ -1,14 +1,14 @@
 'use server'
 
-import { analyzeClothing } from "@/ai/flows/analyze-clothing";
-import type { AnalyzeClothingOutput } from "@/ai/flows/analyze-clothing";
+import { analisarRoupa } from "@/ai/flows/analisar-roupa";
+import type { AnalisarRoupaOutput } from "@/ai/flows/analisar-roupa";
 
-export async function analyzeImage(photoDataUri: string): Promise<AnalyzeClothingOutput> {
+export async function analisarImagem(photoDataUri: string): Promise<AnalisarRoupaOutput> {
   try {
-    const result = await analyzeClothing({ photoDataUri });
+    const result = await analisarRoupa({ photoDataUri });
     return result;
   } catch (error) {
-    console.error("Error analyzing image:", error);
-    throw new Error("Failed to analyze image with AI.");
+    console.error("Erro ao analisar imagem:", error);
+    throw new Error("Falha ao analisar imagem com IA.");
   }
 }

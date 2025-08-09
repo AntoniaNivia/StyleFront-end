@@ -19,7 +19,7 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you'd handle authentication here
+    // Em um aplicativo real, você lidaria com a autenticação aqui
     router.push('/dashboard');
   }
 
@@ -27,30 +27,30 @@ export default function LoginPage() {
     <form onSubmit={handleLogin}>
       <Card>
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl">Welcome Back</CardTitle>
+          <CardTitle className="text-2xl">Bem-vindo de Volta</CardTitle>
           <CardDescription>
-            Enter your email and password to sign in to your account
+            Digite seu e-mail e senha para entrar em sua conta
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" required />
+            <Input id="email" type="email" placeholder="m@exemplo.com" required />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Senha</Label>
             <Input id="password" type="password" required />
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full bg-accent hover:bg-accent/90">Login</Button>
+          <Button type="submit" className="w-full bg-accent hover:bg-accent/90">Entrar</Button>
           <div className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            Não tem uma conta?{" "}
             <Link
               href="/register"
               className="font-medium text-accent underline-offset-4 hover:underline"
             >
-              Sign up
+              Cadastre-se
             </Link>
           </div>
         </CardFooter>

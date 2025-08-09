@@ -1,37 +1,37 @@
-import type { User, ClothingItem, FeedPost } from './types';
+import type { Usuario, ItemDeVestuario, PostagemFeed } from './types';
 
-export const mockUser: User = {
+export const mockUser: Usuario = {
   id: 'user-1',
   name: 'Sofia',
-  email: 'sofia@example.com',
+  email: 'sofia@exemplo.com',
   avatarUrl: 'https://placehold.co/100x100.png',
   type: 'regular',
-  gender: 'female',
-  mannequinPreference: 'female',
+  genero: 'feminino',
+  preferenciaManequim: 'feminino',
 };
 
-export const mockStoreUser: User = {
+export const mockStoreUser: Usuario = {
     id: 'store-1',
-    name: 'Chic Boutique',
-    email: 'contact@chicboutique.com',
+    name: 'Boutique Chique',
+    email: 'contato@boutiquechique.com',
     avatarUrl: 'https://placehold.co/100x100.png',
     type: 'store',
 }
 
-export const wardrobe: ClothingItem[] = [
-  { id: 'item-1', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Blue Denim Jacket', type: 'Jacket', color: 'Blue', season: 'Spring', occasion: 'Casual', tags: ['denim', 'outerwear'] },
-  { id: 'item-2', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'White T-Shirt', type: 'Top', color: 'White', season: 'All', occasion: 'Casual', tags: ['basic', 'cotton'] },
-  { id: 'item-3', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Black Skinny Jeans', type: 'Pants', color: 'Black', season: 'All', occasion: 'Casual', tags: ['denim', 'jeans'] },
-  { id: 'item-4', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Floral Sundress', type: 'Dress', color: 'Multicolor', season: 'Summer', occasion: 'Day Out', tags: ['floral', 'dress'] },
-  { id: 'item-5', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Red Formal Gown', type: 'Dress', color: 'Red', season: 'Winter', occasion: 'Formal', tags: ['elegant', 'evening'] },
-  { id: 'item-6', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Leather Ankle Boots', type: 'Shoes', color: 'Black', season: 'Fall', occasion: 'Any', tags: ['boots', 'leather'] },
+export const guardaRoupa: ItemDeVestuario[] = [
+  { id: 'item-1', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Jaqueta Jeans Azul', tipo: 'Jaqueta', cor: 'Azul', estacao: 'Primavera', ocasiao: 'Casual', tags: ['jeans', 'casaco'] },
+  { id: 'item-2', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Camiseta Branca', tipo: 'Blusa', cor: 'Branca', estacao: 'Todas', ocasiao: 'Casual', tags: ['básica', 'algodão'] },
+  { id: 'item-3', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Calça Jeans Skinny Preta', tipo: 'Calça', cor: 'Preta', estacao: 'Todas', ocasiao: 'Casual', tags: ['jeans', 'calça'] },
+  { id: 'item-4', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Vestido de Verão Floral', tipo: 'Vestido', cor: 'Multicolor', estacao: 'Verão', ocasiao: 'Passeio', tags: ['floral', 'vestido'] },
+  { id: 'item-5', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Vestido de Gala Vermelho', tipo: 'Vestido', cor: 'Vermelho', estacao: 'Inverno', ocasiao: 'Formal', tags: ['elegante', 'noite'] },
+  { id: 'item-6', userId: 'user-1', imageUrl: 'https://placehold.co/400x600.png', name: 'Botas de Couro Cano Curto', tipo: 'Sapatos', cor: 'Preto', estacao: 'Outono', ocasiao: 'Qualquer', tags: ['botas', 'couro'] },
 ];
 
-export const feedPosts: FeedPost[] = [
-  { id: 'post-1', author: { id: 'store-1', name: 'Chic Boutique', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', caption: 'New fall collection is here!', likes: 124, isLiked: false, isSaved: true, items: [wardrobe[0], wardrobe[2]] },
-  { id: 'post-2', author: { id: 'user-2', name: 'Alex', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', caption: 'Loving this casual look for the weekend.', likes: 88, isLiked: true, isSaved: false, items: [wardrobe[1], wardrobe[2]] },
-  { id: 'post-3', author: { id: 'store-2', name: 'Modern Threads', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', caption: 'Summer vibes only ☀️', likes: 231, isLiked: false, isSaved: false, items: [wardrobe[3]] },
-  { id: 'post-4', author: { id: 'user-1', name: 'Sofia', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', caption: 'My outfit for the gala last night!', likes: 450, isLiked: true, isSaved: true, items: [wardrobe[4]] },
-  { id: 'post-5', author: { id: 'store-1', name: 'Chic Boutique', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', caption: 'Get ready for autumn with our new arrivals.', likes: 156, isLiked: false, isSaved: false, items: [wardrobe[5]] },
-  { id: 'post-6', author: { id: 'user-3', name: 'Leo', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', caption: 'Street style.', likes: 99, isLiked: false, isSaved: true, items: [] },
+export const feedPosts: PostagemFeed[] = [
+  { id: 'post-1', autor: { id: 'store-1', name: 'Boutique Chique', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', legenda: 'Nova coleção de outono chegou!', curtidas: 124, curtido: false, salvo: true, itens: [guardaRoupa[0], guardaRoupa[2]] },
+  { id: 'post-2', autor: { id: 'user-2', name: 'Alex', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', legenda: 'Amando este look casual para o fim de semana.', curtidas: 88, curtido: true, salvo: false, itens: [guardaRoupa[1], guardaRoupa[2]] },
+  { id: 'post-3', autor: { id: 'store-2', name: 'Fios Modernos', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', legenda: 'Apenas vibes de verão ☀️', curtidas: 231, curtido: false, salvo: false, itens: [guardaRoupa[3]] },
+  { id: 'post-4', autor: { id: 'user-1', name: 'Sofia', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', legenda: 'Meu traje para a gala de ontem à noite!', curtidas: 450, curtido: true, salvo: true, itens: [guardaRoupa[4]] },
+  { id: 'post-5', autor: { id: 'store-1', name: 'Boutique Chique', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', legenda: 'Prepare-se para o outono com nossas novidades.', curtidas: 156, curtido: false, salvo: false, itens: [guardaRoupa[5]] },
+  { id: 'post-6', autor: { id: 'user-3', name: 'Leo', avatarUrl: 'https://placehold.co/100x100.png' }, imageUrl: 'https://placehold.co/600x800.png', legenda: 'Estilo de rua.', curtidas: 99, curtido: false, salvo: true, itens: [] },
 ];

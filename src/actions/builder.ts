@@ -1,23 +1,23 @@
 'use server'
 
-import { generateOutfit } from "@/ai/flows/generate-outfit";
-import type { GenerateOutfitInput, GenerateOutfitOutput } from "@/ai/flows/generate-outfit";
-import { wardrobe, mockUser } from "@/lib/data";
+import { gerarTraje } from "@/ai/flows/gerar-traje";
+import type { GerarTrajeInput, GerarTrajeOutput } from "@/ai/flows/gerar-traje";
+import { guardaRoupa, mockUser } from "@/lib/data";
 
-type GenerateLookInput = Omit<GenerateOutfitInput, 'wardrobe' | 'mannequinPreference'>;
+type GerarLookInput = Omit<GerarTrajeInput, 'guardaRoupa' | 'preferenciaManequim'>;
 
-export async function generateLook(input: GenerateLookInput): Promise<GenerateOutfitOutput> {
+export async function gerarLook(input: GerarLookInput): Promise<GerarTrajeOutput> {
     try {
-        // In a real app, you'd fetch the current user's wardrobe and mannequin preference from a database
-        const fullInput: GenerateOutfitInput = {
+        // Em um aplicativo real, você buscaria o guarda-roupa e a preferência de manequim do usuário atual de um banco de dados
+        const fullInput: GerarTrajeInput = {
             ...input,
-            wardrobe: JSON.stringify(wardrobe),
-            mannequinPreference: mockUser.mannequinPreference || 'neutral',
+            guardaRoupa: JSON.stringify(guardaRoupa),
+            preferenciaManequim: mockUser.preferenciaManequim || 'neutro',
         };
-        const result = await generateOutfit(fullInput);
+        const result = await gerarTraje(fullInput);
         return result;
     } catch (error) {
-        console.error("Error generating outfit:", error);
-        throw new Error("Failed to generate outfit with AI.");
+        console.error("Erro ao gerar traje:", error);
+        throw new Error("Falha ao gerar traje com IA.");
     }
 }

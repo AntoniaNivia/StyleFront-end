@@ -16,14 +16,14 @@ import { Label } from "@/components/ui/label";
 import { Loader2, Sparkles, Upload } from "lucide-react";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
-import { analyzeImage } from "@/actions/wardrobe";
+import { analisarImagem } from "@/actions/wardrobe";
 import { useForm, Controller } from "react-hook-form";
 
 type FormValues = {
-  type: string;
-  color: string;
-  season: string;
-  occasion: string;
+  tipo: string;
+  cor: string;
+  estacao: string;
+  ocasiao: string;
   tags: string;
 };
 
@@ -36,10 +36,10 @@ export function AddItemDialog({ children }: { children: ReactNode }) {
 
   const { control, setValue, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
-      type: "",
-      color: "",
-      season: "",
-      occasion: "",
+      tipo: "",
+      cor: "",
+      estacao: "",
+      ocasiao: "",
       tags: "",
     },
   });
@@ -60,8 +60,8 @@ export function AddItemDialog({ children }: { children: ReactNode }) {
   const handleAnalyze = async () => {
     if (!imageData) {
       toast({
-        title: "No Image Selected",
-        description: "Please upload an image to analyze.",
+        title: "Nenhuma Imagem Selecionada",
+        description: "Por favor, envie uma imagem para analisar.",
         variant: "destructive",
       });
       return;
@@ -69,20 +69,20 @@ export function AddItemDialog({ children }: { children: ReactNode }) {
 
     setIsAnalyzing(true);
     try {
-      const result = await analyzeImage(imageData);
-      setValue("type", result.type);
-      setValue("color", result.color);
-      setValue("season", result.season);
-      setValue("occasion", result.occasion);
+      const result = await analisarImagem(imageData);
+      setValue("tipo", result.tipo);
+      setValue("cor", result.cor);
+      setValue("estacao", result.estacao);
+      setValue("ocasiao", result.ocasiao);
       setValue("tags", result.tags.join(", "));
       toast({
-        title: "Analysis Complete",
-        description: "Your clothing item has been analyzed.",
+        title: "Análise Concluída",
+        description: "Seu item de vestuário foi analisado.",
       });
     } catch (error) {
       toast({
-        title: "Analysis Failed",
-        description: "There was an error analyzing the image. Please try again.",
+        title: "Falha na Análise",
+        description: "Ocorreu um erro ao analisar a imagem. Por favor, tente novamente.",
         variant: "destructive",
       });
     } finally {
@@ -91,8 +91,8 @@ export function AddItemDialog({ children }: { children: ReactNode }) {
   };
   
   const onSubmit = (data: FormValues) => {
-    console.log("Saving item:", { ...data, image: imageData });
-    toast({ title: "Item Saved!", description: "The new item has been added to your wardrobe." });
+    console.log("Salvando item:", { ...data, image: imageData });
+    toast({ title: "Item Salvo!", description: "O novo item foi adicionado ao seu guarda-roupa." });
     setOpen(false);
     reset();
     setImagePreview(null);
@@ -105,21 +105,21 @@ export function AddItemDialog({ children }: { children: ReactNode }) {
       <DialogContent className="sm:max-w-[600px]">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Add New Item</DialogTitle>
+            <DialogTitle>Adicionar Novo Item</DialogTitle>
             <DialogDescription>
-              Upload a picture of your clothing item. Use AI to fill the details or do it manually.
+              Envie uma foto do seu item de vestuário. Use a IA para preencher os detalhes ou faça manualmente.
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-1 gap-6 py-4 md:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="picture">Image</Label>
+              <Label htmlFor="picture">Imagem</Label>
               <div className="relative flex h-64 w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/50 bg-secondary/50 text-center">
                 {imagePreview ? (
                   <Image src={imagePreview} alt="Preview" fill className="object-contain p-2" />
                 ) : (
                   <div className="space-y-2 text-muted-foreground">
                     <Upload className="mx-auto h-8 w-8" />
-                    <p>Click to upload or drag & drop</p>
+                    <p>Clique para enviar ou arraste e solte</p>
                   </div>
                 )}
                 <Input
@@ -136,47 +136,47 @@ export function AddItemDialog({ children }: { children: ReactNode }) {
                 ) : (
                   <Sparkles className="mr-2 h-4 w-4" />
                 )}
-                Analyze with AI
+                Analisar com IA
               </Button>
             </div>
             <div className="space-y-4">
               <Controller
-                name="type"
+                name="tipo"
                 control={control}
                 render={({ field }) => (
                   <div className="grid gap-2">
-                    <Label htmlFor="type">Type</Label>
-                    <Input id="type" placeholder="e.g., T-Shirt, Jeans" {...field} />
+                    <Label htmlFor="type">Tipo</Label>
+                    <Input id="type" placeholder="ex: Camiseta, Calça Jeans" {...field} />
                   </div>
                 )}
               />
               <Controller
-                name="color"
+                name="cor"
                 control={control}
                 render={({ field }) => (
                   <div className="grid gap-2">
-                    <Label htmlFor="color">Color</Label>
-                    <Input id="color" placeholder="e.g., Blue, Red" {...field} />
+                    <Label htmlFor="color">Cor</Label>
+                    <Input id="color" placeholder="ex: Azul, Vermelho" {...field} />
                   </div>
                 )}
               />
               <Controller
-                name="season"
+                name="estacao"
                 control={control}
                 render={({ field }) => (
                   <div className="grid gap-2">
-                    <Label htmlFor="season">Season</Label>
-                    <Input id="season" placeholder="e.g., Summer, Winter" {...field} />
+                    <Label htmlFor="season">Estação</Label>
+                    <Input id="season" placeholder="ex: Verão, Inverno" {...field} />
                   </div>
                 )}
               />
               <Controller
-                name="occasion"
+                name="ocasiao"
                 control={control}
                 render={({ field }) => (
                   <div className="grid gap-2">
-                    <Label htmlFor="occasion">Occasion</Label>
-                    <Input id="occasion" placeholder="e.g., Casual, Formal" {...field} />
+                    <Label htmlFor="occasion">Ocasião</Label>
+                    <Input id="occasion" placeholder="ex: Casual, Formal" {...field} />
                   </div>
                 )}
               />
@@ -186,7 +186,7 @@ export function AddItemDialog({ children }: { children: ReactNode }) {
                 render={({ field }) => (
                     <div className="grid gap-2">
                         <Label htmlFor="tags">Tags</Label>
-                        <Input id="tags" placeholder="e.g., cotton, denim (comma-separated)" {...field} />
+                        <Input id="tags" placeholder="ex: algodão, jeans (separado por vírgula)" {...field} />
                     </div>
                 )}
                 />
@@ -194,10 +194,10 @@ export function AddItemDialog({ children }: { children: ReactNode }) {
           </div>
           <DialogFooter>
             <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" className="bg-accent hover:bg-accent/90">
-              Save Item
+              Salvar Item
             </Button>
           </DialogFooter>
         </form>

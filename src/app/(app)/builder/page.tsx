@@ -9,32 +9,32 @@ import { Textarea } from "@/components/ui/textarea"
 import { Loader2, Sparkles, Wand2 } from "lucide-react"
 import Image from "next/image"
 import { useToast } from "@/hooks/use-toast"
-import { generateLook } from "@/actions/builder"
-import type { GenerateOutfitOutput } from "@/ai/flows/generate-outfit"
+import { gerarLook } from "@/actions/builder"
+import type { GerarTrajeOutput } from "@/ai/flows/gerar-traje"
 
 export default function BuilderPage() {
-  const [climate, setClimate] = useState("")
-  const [occasion, setOccasion] = useState("")
-  const [userStyle, setUserStyle] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [result, setResult] = useState<GenerateOutfitOutput | null>(null)
+  const [clima, setClima] = useState("")
+  const [ocasiao, setOcasiao] = useState("")
+  const [estiloUsuario, setEstiloUsuario] = useState("")
+  const [carregando, setCarregando] = useState(false)
+  const [resultado, setResultado] = useState<GerarTrajeOutput | null>(null)
   const { toast } = useToast()
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    setResult(null)
+    setCarregando(true)
+    setResultado(null)
     try {
-      const response = await generateLook({ climate, occasion, userStyle })
-      setResult(response)
+      const response = await gerarLook({ clima, ocasiao, estiloUsuario: estiloUsuario })
+      setResultado(response)
     } catch (error) {
       toast({
-        title: "Generation Failed",
-        description: "There was an error generating the look. Please try again.",
+        title: "Falha na Geração",
+        description: "Ocorreu um erro ao gerar o look. Por favor, tente novamente.",
         variant: "destructive",
       })
     } finally {
-      setIsLoading(false)
+      setCarregando(false)
     }
   }
 
@@ -44,31 +44,31 @@ export default function BuilderPage() {
         <form onSubmit={handleGenerate}>
           <Card>
             <CardHeader>
-              <CardTitle>AI Outfit Builder</CardTitle>
-              <CardDescription>Describe the context, and our AI stylist will create the perfect look for you.</CardDescription>
+              <CardTitle>Criador de Looks com IA</CardTitle>
+              <CardDescription>Descreva o contexto, e nosso estilista de IA criará o look perfeito para você.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-2">
-                <Label htmlFor="climate">Climate</Label>
-                <Input id="climate" placeholder="e.g., Sunny and warm, 25°C" value={climate} onChange={(e) => setClimate(e.target.value)} required />
+                <Label htmlFor="climate">Clima</Label>
+                <Input id="climate" placeholder="ex: Ensolarado e quente, 25°C" value={clima} onChange={(e) => setClima(e.target.value)} required />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="occasion">Occasion</Label>
-                <Input id="occasion" placeholder="e.g., Casual lunch with friends" value={occasion} onChange={(e) => setOccasion(e.target.value)} required />
+                <Label htmlFor="occasion">Ocasião</Label>
+                <Input id="occasion" placeholder="ex: Almoço casual com amigos" value={ocasiao} onChange={(e) => setOcasiao(e.target.value)} required />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="style">Your Style</Label>
-                <Textarea id="style" placeholder="e.g., I love vintage, bohemian style. Prefer comfortable clothes." value={userStyle} onChange={(e) => setUserStyle(e.target.value)} required />
+                <Label htmlFor="style">Seu Estilo</Label>
+                <Textarea id="style" placeholder="ex: Adoro o estilo vintage, boêmio. Prefiro roupas confortáveis." value={estiloUsuario} onChange={(e) => setEstiloUsuario(e.target.value)} required />
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit" className="w-full bg-accent hover:bg-accent/90" disabled={isLoading}>
-                {isLoading ? (
+              <Button type="submit" className="w-full bg-accent hover:bg-accent/90" disabled={carregando}>
+                {carregando ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
                   <Sparkles className="mr-2 h-4 w-4" />
                 )}
-                Generate Look
+                Gerar Look
               </Button>
             </CardFooter>
           </Card>
@@ -77,32 +77,32 @@ export default function BuilderPage() {
 
       <div className="lg:col-span-3">
         <Card className="flex h-full min-h-[500px] w-full items-center justify-center">
-          {isLoading && (
+          {carregando && (
             <div className="flex flex-col items-center gap-4 text-muted-foreground">
               <Loader2 className="h-12 w-12 animate-spin text-accent" />
-              <p className="font-semibold">Our AI is styling you...</p>
-              <p className="text-sm">This may take a moment.</p>
+              <p className="font-semibold">Nossa IA está montando seu estilo...</p>
+              <p className="text-sm">Isso pode levar um momento.</p>
             </div>
           )}
 
-          {!isLoading && !result && (
+          {!carregando && !resultado && (
             <div className="flex flex-col items-center gap-4 text-center text-muted-foreground">
               <Wand2 className="h-16 w-16" />
-              <h2 className="text-xl font-semibold text-foreground">Your AI-generated look will appear here</h2>
-              <p>Fill out the form to get started!</p>
+              <h2 className="text-xl font-semibold text-foreground">Seu look gerado por IA aparecerá aqui</h2>
+              <p>Preencha o formulário para começar!</p>
             </div>
           )}
 
-          {!isLoading && result && (
+          {!carregando && resultado && (
             <CardContent className="flex w-full flex-col items-center gap-6 p-6 md:flex-row">
                  <div className="relative h-[450px] w-full max-w-[300px] flex-shrink-0">
-                    <Image src={result.mannequinPhotoDataUri} alt="Generated outfit" fill className="rounded-lg object-cover" />
+                    <Image src={resultado.mannequinPhotoDataUri} alt="Traje gerado" fill className="rounded-lg object-cover" />
                  </div>
                  <div className="w-full space-y-4">
-                    <h3 className="text-xl font-bold">Stylist's Notes</h3>
-                    <p className="text-muted-foreground">{result.reasoning}</p>
-                    <h3 className="text-xl font-bold">Outfit Suggestion</h3>
-                    <p className="text-muted-foreground">{result.outfitSuggestion}</p>
+                    <h3 className="text-xl font-bold">Notas do Estilista</h3>
+                    <p className="text-muted-foreground">{resultado.justificativa}</p>
+                    <h3 className="text-xl font-bold">Sugestão de Traje</h3>
+                    <p className="text-muted-foreground">{resultado.sugestaoTraje}</p>
                  </div>
             </CardContent>
           )}

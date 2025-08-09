@@ -1,32 +1,32 @@
-export type User = {
+export type Usuario = {
   id: string;
   name: string;
   email: string;
   avatarUrl: string;
   type: 'regular' | 'store';
-  gender?: 'male' | 'female' | 'other';
-  mannequinPreference?: 'male' | 'female' | 'neutral';
+  genero?: 'masculino' | 'feminino' | 'outro';
+  preferenciaManequim?: 'masculino' | 'feminino' | 'neutro';
 };
 
-export type ClothingItem = {
+export type ItemDeVestuario = {
   id: string;
   userId: string;
   imageUrl: string;
   name: string;
-  type: string;
-  color: string;
-  season: string;
-  occasion: string;
+  tipo: string;
+  cor: string;
+  estacao: string;
+  ocasiao: string;
   tags: string[];
 };
 
-export type FeedPost = {
+export type PostagemFeed = {
   id: string;
-  author: Pick<User, 'id' | 'name' | 'avatarUrl'>;
+  autor: Pick<Usuario, 'id' | 'name' | 'avatarUrl'>;
   imageUrl: string;
-  caption: string;
-  likes: number;
-  isLiked: boolean;
-  isSaved: boolean;
-  items: Pick<ClothingItem, 'id' | 'name' | 'imageUrl'>[];
+  legenda: string;
+  curtidas: number;
+  curtido: boolean;
+  salvo: boolean;
+  itens: Pick<ItemDeVestuario, 'id' | 'name' | 'imageUrl'>[];
 };

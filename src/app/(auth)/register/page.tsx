@@ -21,7 +21,7 @@ export default function RegisterPage() {
 
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault();
-        // In a real app, you'd handle registration here
+        // Em um aplicativo real, você lidaria com o registro aqui
         router.push('/dashboard');
     }
 
@@ -29,75 +29,75 @@ export default function RegisterPage() {
     <form onSubmit={handleRegister}>
         <Card>
         <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-2xl">Create an Account</CardTitle>
+            <CardTitle className="text-2xl">Criar uma Conta</CardTitle>
             <CardDescription>
-            Fill in the details below to create your StyleWise account
+            Preencha os detalhes abaixo para criar sua conta Style
             </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
             <div className="grid gap-2">
-                <Label>Account Type</Label>
+                <Label>Tipo de Conta</Label>
                 <RadioGroup defaultValue="regular" className="flex gap-4">
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="regular" id="r1" />
-                        <Label htmlFor="r1">Regular User</Label>
+                        <Label htmlFor="r1">Usuário Regular</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="store" id="r2" />
-                        <Label htmlFor="r2">Store</Label>
+                        <Label htmlFor="r2">Loja</Label>
                     </div>
                 </RadioGroup>
             </div>
             <div className="grid gap-2">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" type="text" placeholder="Your Name" required />
+                <Label htmlFor="name">Nome</Label>
+                <Input id="name" type="text" placeholder="Seu Nome" required />
             </div>
             <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="m@example.com" required />
+                <Input id="email" type="email" placeholder="m@exemplo.com" required />
             </div>
             <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Senha</Label>
                 <Input id="password" type="password" required />
             </div>
             <div className="grid grid-cols-2 gap-4">
                  <div className="grid gap-2">
-                    <Label htmlFor="gender">Gender</Label>
+                    <Label htmlFor="gender">Gênero</Label>
                      <Select>
                         <SelectTrigger id="gender">
-                            <SelectValue placeholder="Select gender" />
+                            <SelectValue placeholder="Selecione o gênero" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="female">Female</SelectItem>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
+                            <SelectItem value="feminino">Feminino</SelectItem>
+                            <SelectItem value="masculino">Masculino</SelectItem>
+                            <SelectItem value="outro">Outro</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
                  <div className="grid gap-2">
-                    <Label htmlFor="mannequin">Mannequin</Label>
+                    <Label htmlFor="mannequin">Manequim</Label>
                      <Select>
                         <SelectTrigger id="mannequin">
-                            <SelectValue placeholder="Select preference" />
+                            <SelectValue placeholder="Selecione a preferência" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="female">Female</SelectItem>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="neutral">Neutral</SelectItem>
+                            <SelectItem value="feminino">Feminino</SelectItem>
+                            <SelectItem value="masculino">Masculino</SelectItem>
+                            <SelectItem value="neutro">Neutro</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
             </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full bg-accent hover:bg-accent/90">Create Account</Button>
+            <Button type="submit" className="w-full bg-accent hover:bg-accent/90">Criar Conta</Button>
             <div className="text-center text-sm text-muted-foreground">
-                Already have an account?{" "}
+                Já tem uma conta?{" "}
                 <Link
                 href="/login"
                 className="font-medium text-accent underline-offset-4 hover:underline"
                 >
-                Sign in
+                Entrar
                 </Link>
             </div>
         </CardFooter>
